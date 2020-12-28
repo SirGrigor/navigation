@@ -31,7 +31,7 @@
 ### Examples and hints
 
 1. Base station can be described with the following set of properties:
-```json
+```
 {
 "id": uuid,
 "name": string,
@@ -43,7 +43,7 @@
 
 
 2. Mobile station can be described with the following set of properties:
-```json
+```
 {
 "id": uuid,
 "lastKnownX": float,
@@ -55,7 +55,7 @@
 3. RestEndpoint1 message example:
 
 
-```json
+```
 {
 "base_station_id": uuid,
 "reports":
@@ -68,7 +68,7 @@
 
 4. RestEndpoint2 response example:
 
-```json
+```
 {
 "mobileId": uuid,
 "x": float,
