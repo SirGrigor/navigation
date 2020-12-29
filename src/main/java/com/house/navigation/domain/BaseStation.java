@@ -5,10 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -28,4 +26,8 @@ public class BaseStation {
 
     @Column(name = "coordinate_y")
     private float coordinateY;
+
+    @Column(name = "detection_radius_in_meters")
+    private float detectionRadiusInMeters;
+
 }
