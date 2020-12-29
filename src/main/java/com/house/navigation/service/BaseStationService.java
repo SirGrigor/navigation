@@ -1,5 +1,6 @@
 package com.house.navigation.service;
 
+import com.house.navigation.domain.BaseStation;
 import com.house.navigation.repository.BaseStationRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,5 +13,7 @@ public class BaseStationService {
         this.baseStationRepository = baseStationRepository;
     }
 
-
+    public void addBaseStation(BaseStation baseStation){
+        baseStationRepository.save(baseStation);
+    }
 }

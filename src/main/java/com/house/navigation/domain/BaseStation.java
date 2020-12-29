@@ -1,12 +1,8 @@
 package com.house.navigation.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -15,7 +11,8 @@ import java.util.UUID;
 public class BaseStation {
 
     @Id
-    @Column(name = "base_station_id", columnDefinition = "BINARY(16)")
+    @Column(name = "base_station_id",columnDefinition = "BINARY(16)")
+    @GeneratedValue
     private UUID uuid;
 
     @Column(name = "base_station_name")
