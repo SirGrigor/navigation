@@ -1,6 +1,7 @@
 package com.house.navigation.util;
 
 import com.house.navigation.DTO.MobileStationDTO;
+import com.house.navigation.domain.MobileStation;
 import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver;
 import com.lemmingapex.trilateration.TrilaterationFunction;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
