@@ -1,5 +1,6 @@
 package com.house.navigation.domain;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,6 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "base_station")
 public class BaseStation {
