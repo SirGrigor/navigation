@@ -19,7 +19,7 @@ public class CalculateDistance {
             NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances),
                     new LevenbergMarquardtOptimizer());
             LeastSquaresOptimizer.Optimum optimum = solver.solve();
-            // the answer
+
             return optimum.getPoint().toArray();
 
         } catch (Exception e) {
@@ -27,6 +27,7 @@ public class CalculateDistance {
             if (positions.length == 1) {
                 return new double[]{positions[0][0], positions[0][1]};
             } else {
+
                 throw new ArithmeticException("Please provide at least one BaseStation Report");
             }
         }
