@@ -24,9 +24,12 @@ public class ReportStationService {
 
     } else {
             reportStation.getReports().forEach(report -> {
-                if(mobileStationDetectionRepository.existsByMobileStationId(report.getMobileStationId())){
+                if(mobileStationDetectionRepository.
+                        existsByMobileStationIdAndBaseStationId(
+                                report.getMobileStationId(), reportStation.getBaseStationId())){
+
                     MobileStationDetection detectionReport = mobileStationDetectionRepository.
-                            findByMobileStationId(report.getMobileStationId());
+                            findByMobileStationIdAndBaseStationId(report.getMobileStationId(), reportStation.getBaseStationId());
                     detectionReport.setDistance(report.getDistance());
                     detectionReport.setTimestamp(report.getTimestamp());
 

@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface MobileStationDetectionRepository extends JpaRepository<MobileStationDetection, Long> {
     List<MobileStationDetection> findByMobileStationIdOrderByDistanceAsc(UUID mobileStationUuid);
-    MobileStationDetection findByMobileStationId(UUID mobileStationId);
-    boolean existsByMobileStationId(UUID mobileStationId);
+    MobileStationDetection findByMobileStationIdAndBaseStationId(UUID mobileStationUuid, UUID baseStationUuid);
+    boolean existsByMobileStationIdAndBaseStationId(UUID mobileStationId, UUID baseStationUuid);
 }
