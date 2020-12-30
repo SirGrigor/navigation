@@ -6,7 +6,6 @@ import com.house.navigation.repository.ReportStationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -27,8 +26,6 @@ class ReportStationServiceTest {
     @Mock
     ReportStationRepository reportStationRepository;
 
-    @InjectMocks
-    ReportStationService reportStationService;
 
     @BeforeEach
     public void setUp() {

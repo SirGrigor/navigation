@@ -20,9 +20,6 @@ class BaseStationServiceTest {
     @Mock
     BaseStationRepository baseStationRepository;
 
-    @InjectMocks
-    BaseStationService baseStationService;
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);

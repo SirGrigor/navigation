@@ -43,7 +43,7 @@ public class MobileStationService {
         return mobileStationDTO;
     }
 
-    private double[][] getPositions(List<MobileStationDetection> detections) {
+    public double[][] getPositions(List<MobileStationDetection> detections) {
         List<double[]> cachePositions = new ArrayList<>();
 
         for (MobileStationDetection detection : detections) {
@@ -57,7 +57,7 @@ public class MobileStationService {
         return cachePositions.toArray(positions);
     }
 
-    private double[] getDistances(List<MobileStationDetection> detections) {
+    public double[] getDistances(List<MobileStationDetection> detections) {
         double[] distance = new double[detections.size()];
 
         for (int i = 0; i < distance.length; i++) {
@@ -66,9 +66,9 @@ public class MobileStationService {
         return distance;
     }
 
-    private void addLastMobileStationCoordinates(float lastCoordinateX, float lastCoordinateY, UUID mobileStationId) {
-        MobileStation mobileStation = new MobileStation();
-        mobileStation.setUuid(mobileStationId);
+    public void addLastMobileStationCoordinates(float lastCoordinateX, float lastCoordinateY, UUID mobileStationId) {
+        MobileStation mobileStation = mobileStationRepository.getOne(mobileStationId);
+
         mobileStation.setLastCoordinateX(lastCoordinateX);
         mobileStation.setLastCoordinateY(lastCoordinateY);
 
