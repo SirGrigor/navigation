@@ -46,7 +46,7 @@ public class CalculateDistance {
                 mobileStationDTO.setErrorCode(300);
                 mobileStationDTO.setErrorDescription("Required additional Base Station for precise calculation");
             } else {
-                mobileStationDTO.setErrorRadius(errorRadius(mobileStationCoordinates, positions[0], distances[0]));
+                mobileStationDTO.setErrorRadius(errorRadius(positions, distances));
                 mobileStationDTO.setErrorCode(200);
                 mobileStationDTO.setErrorDescription("No error");
             }
@@ -54,10 +54,12 @@ public class CalculateDistance {
             return mobileStationDTO;
         }
 
-    private float errorRadius(double[] mobileStationCoordinates, double[] baseStationCoordinates, double distance){
-        float coordinateX = (float)Math.pow(baseStationCoordinates[0] - (float) mobileStationCoordinates[0], 2);
-        float coordinateY = (float)Math.pow(baseStationCoordinates[1] - (float) mobileStationCoordinates[1], 2);
+    private float errorRadius(double[][] baseStationCoordinates, double[] distance){
+        float coordinateX = (float)Math.pow(baseStationCoordinates[0][0] - (float) baseStationCoordinates[1][0], 2);
+        float coordinateY = (float)Math.pow(baseStationCoordinates[0][1] - (float) baseStationCoordinates[1][1], 2);
         float vectorLength = (float) Math.pow((coordinateX + coordinateY), 0.5);
-        return vectorLength - (float) distance;
+
+        float distanceSum = (float) (distance[0] + distance[1]);
+        return distanceSum - vectorLength;
     }
 }
