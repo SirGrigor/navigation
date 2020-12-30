@@ -22,17 +22,21 @@ public class ReportStationService {
         if(!reportRepository.existsById(reportStation.getBaseStationId())) {
             reportRepository.save(reportStation);
 
-        } else {
-            MobileStationDetection report = mobileStationDetectionRepository
-                    .findByBaseStationId(reportStation.getBaseStationId());
+    } else {
+            reportStation.getReports().forEach(report -> {
+                if(mobileStationDetectionRepository.existsByMobileStationId(report.getMobileStationId())){
+                    MobileStationDetection detectionReport = mobileStationDetectionRepository.
+                            findByMobileStationId(report.getMobileStationId());
+                    detectionReport.setDistance(report.getDistance());
+                    detectionReport.setTimestamp(report.getTimestamp());
 
-            reportStation.getReports().forEach(item -> {
-                report.setDistance(item.getDistance());
-                report.setMobileStationId(item.getMobileStationId());
-                report.setTimestamp(item.getTimestamp());
-                mobileStationDetectionRepository.save(report);
+                    mobileStationDetectionRepository.save(detectionReport);
+                }
+                else {
+                    report.setBaseStationId(reportStation.getBaseStationId());
+                    mobileStationDetectionRepository.save(report);
+                }
             });
-        }
-    }
 
-}
+        }
+}}
