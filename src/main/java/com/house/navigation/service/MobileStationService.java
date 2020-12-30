@@ -28,12 +28,17 @@ public class MobileStationService {
     }
 
     public MobileStationDTO getReport(UUID mobileStationId) {
-        List<MobileStationDetection> detections = mobileStationDetectionRepository.findByMobileStationIdOrderByDistanceAsc(mobileStationId);
+        List<MobileStationDetection> detections = mobileStationDetectionRepository
+                .findByMobileStationIdOrderByDistanceAsc(mobileStationId);
+
 
         CalculateDistance calculateDistance = new CalculateDistance();
-        MobileStationDTO mobileStationDTO = calculateDistance.getReport(getPositions(detections), getDistances(detections), mobileStationId);
+        MobileStationDTO mobileStationDTO = calculateDistance
+                .getReport(getPositions(detections), getDistances(detections), mobileStationId);
 
-        addLastMobileStationCoordinates((float) mobileStationDTO.getCoordinateX(), (float) mobileStationDTO.getCoordinateY(), mobileStationId);
+
+        addLastMobileStationCoordinates(mobileStationDTO
+                .getCoordinateX(), mobileStationDTO.getCoordinateY(), mobileStationId);
 
         return mobileStationDTO;
     }
@@ -44,7 +49,7 @@ public class MobileStationService {
         for (MobileStationDetection detection : detections) {
             double coordinateX = baseStationRepository.getOne(detection.getBaseStationId()).getCoordinateX();
             double coordinateY = baseStationRepository.getOne(detection.getBaseStationId()).getCoordinateY();
-            double[] coordinates = {coordinateX,coordinateY};
+            double[] coordinates = {coordinateX, coordinateY};
             cachePositions.add(coordinates);
         }
 
@@ -61,7 +66,7 @@ public class MobileStationService {
         return distance;
     }
 
-    private void addLastMobileStationCoordinates(float lastCoordinateX, float lastCoordinateY, UUID mobileStationId){
+    private void addLastMobileStationCoordinates(float lastCoordinateX, float lastCoordinateY, UUID mobileStationId) {
         MobileStation mobileStation = new MobileStation();
         mobileStation.setUuid(mobileStationId);
         mobileStation.setLastCoordinateX(lastCoordinateX);

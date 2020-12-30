@@ -1,8 +1,6 @@
 package com.house.navigation.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;

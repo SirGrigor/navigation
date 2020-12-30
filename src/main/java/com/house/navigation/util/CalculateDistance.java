@@ -1,7 +1,6 @@
 package com.house.navigation.util;
 
 import com.house.navigation.DTO.MobileStationDTO;
-import com.house.navigation.domain.MobileStation;
 import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver;
 import com.lemmingapex.trilateration.TrilaterationFunction;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer;
@@ -15,6 +14,7 @@ public class CalculateDistance {
     }
 
     private double[] calculationResponse(double[][] positions, double[] distances) throws RuntimeException{
+
         try {
             NonLinearLeastSquaresSolver solver = new NonLinearLeastSquaresSolver(new TrilaterationFunction(positions, distances),
                     new LevenbergMarquardtOptimizer());
