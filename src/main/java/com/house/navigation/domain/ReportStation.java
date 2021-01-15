@@ -1,23 +1,35 @@
 package com.house.navigation.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "detection_report")
 public class ReportStation {
 
     @Id
-    @Column(name = "base_station_id", columnDefinition = "BINARY(16)")
-    private UUID baseStationId;
+    @Column(name = "report_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long reportId;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="base_station_id")
-    @OrderBy
-    private Set<MobileStationDetection> reports;
+    @Column(name = "base_station_uuid")
+    private UUID baseStationUuid;
 
+    @Column(name = "mobile_station_uuid")
+    private UUID mobileStationUuid;
+
+    @Column(name = "distance")
+    private float distance;
+
+    @Column(name = "timestamp")
+    private Date timestamp;
 }

@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface BaseStationRepository extends JpaRepository<BaseStation, UUID> {
+public interface BaseStationRepository extends JpaRepository<BaseStation, Long> {
+    BaseStation findByBaseStationUuid(UUID uuid);
+    boolean existsByBaseStationUuid(UUID uuid);
 }
