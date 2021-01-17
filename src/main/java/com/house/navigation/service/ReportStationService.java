@@ -1,7 +1,8 @@
 package com.house.navigation.service;
 
-import com.house.navigation.DTO.MobileStationDTO;
-import com.house.navigation.DTO.ReportDTO;
+import com.house.navigation.DTO.MobileStationDto;
+import com.house.navigation.DTO.ReportDto;
+import com.house.navigation.DTO.ReportDtoMobileStationRecords;
 import com.house.navigation.domain.ReportStation;
 import com.house.navigation.repository.BaseStationRepository;
 import com.house.navigation.repository.ReportStationRepository;
@@ -27,28 +28,22 @@ public class ReportStationService {
         CalculateDistanceService = calculateDistanceService;
     }
 
-    public void addBaseStationReport(ReportDTO reportDTO) {
+    public void addBaseStationReport(ReportDto reportDTO) {
         List<ReportStation> reportStations = new ArrayList<>();
         reportDTO.getReports().forEach(reportMobileStation ->
                 validateReportData(reportDTO, reportStations, reportMobileStation));
         reportStationRepository.saveAll(reportStations);
     }
 
-    public MobileStationDTO getReportForMobileStation(UUID mobileStationUuid) throws NotFoundException {
+    public MobileStationDto getReportForMobileStation(UUID mobileStationUuid) throws NotFoundException {
         return CalculateDistanceService.getMobileStationReport(mobileStationUuid);
     }
 
-    private void validateReportData(ReportDTO reportDTO, List<ReportStation> reportStations,
-                                    com.house.navigation.DTO.ReportDataDTO reportMobileStation) {
-
-        ReportStation reportStation = new ReportStation();
-        reportStation.setBaseStationUuid(reportDTO.getBaseStationUuid());
-        reportStation.setMobileStationUuid(reportMobileStation.getMobileStationUuid());
-        reportStation.setTimestamp(reportMobileStation.getTimestamp());
-
+    private void validateReportData(ReportDto reportDTO, List<ReportStation> reportStations,
+                                    ReportDtoMobileStationRecords reportMobileStation) {
         if (reportMobileStation.getDistance() < baseStationRepository.findByBaseStationUuid(
                 reportDTO.getBaseStationUuid()).getDetectionRadiusInMeters()) {
-            reportStation.setDistance(reportMobileStation.getDistance());
+            ReportStation reportStation = createReport(reportDTO, reportMobileStation);
             reportStations.add(reportStation);
 
         } else {
@@ -57,6 +52,10 @@ public class ReportStationService {
                     + reportMobileStation.getMobileStationUuid()
                     + " mobile Station is Out of registration Bounds");
         }
+    }
+
+    private ReportStation createReport(ReportDto reportDTO, ReportDtoMobileStationRecords reportMobileStation) {
+        return new ReportStation(reportDTO.getBaseStationUuid(), reportMobileStation.getMobileStationUuid(), reportMobileStation.getDistance(), reportMobileStation.getTimestamp());
     }
 
     public boolean reportRepositoryNotEmpty() {

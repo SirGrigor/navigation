@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MobileStationDTO {
+public class MobileStationDto {
 
     private UUID mobileStationUuid;
     private float coordinateX;

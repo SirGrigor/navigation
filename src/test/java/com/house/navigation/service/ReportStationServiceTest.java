@@ -1,55 +1,50 @@
 package com.house.navigation.service;
 
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import com.house.navigation.domain.ReportStation;
+import com.house.navigation.repository.BaseStationRepository;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Date;
+import java.util.UUID;
 
-@RunWith(MockitoJUnitRunner.class)
-
+@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ReportStationServiceTest {
-//
-//    @Mock
-//    ReportStationRepository reportStationRepository;
-//
-//
-//    @BeforeEach
-//    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-//    }
-//
-//    @Test
-//    void canAddBaseStationReport() {
-//        ReportStation reportStation = new ReportStation();
-//        Mockito.when(reportStationRepository.save(reportStation)).thenReturn(reportStation);
-//    }
-//
-//    @Test
-//    void serviceCanAddBaseStationReport() {
-//
-//        ReportStation reportStation = new ReportStation();
-//        reportStation.setBaseStationId(UUID.randomUUID());
-//
-//        Set<MobileStationDetection> report = new HashSet<>();
-//
-//        Timestamp ts=new Timestamp(System.currentTimeMillis());
-//        Date date=new Date(ts.getTime());
-//
-//        MobileStationDetection mobileStationDetection = new MobileStationDetection();
-//        mobileStationDetection.setMobileStationId(UUID.randomUUID());
-//        mobileStationDetection.setDistance(5);
-//        mobileStationDetection.setTimestamp(date);
-//
-//        report.add(mobileStationDetection);
-//
-//        reportStation.setReports(report);
-//
-//        Mockito.when(reportStationRepository.save(reportStation)).thenReturn(reportStation);
-//
-//        assertEquals(1, reportStation.getReports().size());
-//        reportStation.getReports().forEach(mobileStationDetection1 -> {
-//            assertEquals(5, mobileStationDetection1.getDistance());
-//            assertEquals(date, mobileStationDetection1.getTimestamp());
-//        });
-//    }
+
+    @InjectMocks
+    private ReportStationService reportStationService;
+
+    @Mock
+    BaseStationRepository baseStationRepository;
+
+    @Test
+    void addBaseStationReport() {
+        Date date = new Date();
+        ReportStation reportStation = new ReportStation(UUID.randomUUID(),UUID.randomUUID(),3,date);
+
+    }
+
+    @Test
+    void getReportForMobileStation() {
+    }
+
+    @Test
+    void reportRepositoryNotEmpty() {
+    }
+
+    @Test
+    void existByUuid() {
+
+    }
 }

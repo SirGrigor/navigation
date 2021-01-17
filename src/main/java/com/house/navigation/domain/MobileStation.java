@@ -21,12 +21,18 @@ public class MobileStation {
     private Long mobileStationId;
 
     @Column(name = "mobile_station_uuid")
-    private UUID uuid;
+    private UUID mobileStationUuid;
 
     @Column(name = "last_coordinate_x")
     private float lastCoordinateX;
 
     @Column(name = "last_coordinate_y")
     private float lastCoordinateY;
+
+    public MobileStation(UUID mobileStationUuid, float lastCoordinateX, float lastCoordinateY) {
+        this.mobileStationUuid = mobileStationUuid;
+        this.lastCoordinateX = lastCoordinateX;
+        this.lastCoordinateY = lastCoordinateY;
+    }
 
 }

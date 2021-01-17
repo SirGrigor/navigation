@@ -10,8 +10,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportDTO {
+public class ReportDto {
 
     private UUID baseStationUuid;
-    private Set<ReportDataDTO> reports;
+    private Set<ReportDtoMobileStationRecords> reports;
 }

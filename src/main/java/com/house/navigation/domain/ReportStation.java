@@ -3,7 +3,6 @@ package com.house.navigation.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,4 +31,11 @@ public class ReportStation {
 
     @Column(name = "timestamp")
     private Date timestamp;
+
+    public ReportStation(UUID baseStationUuid, UUID mobileStationUuid, float distance, Date timestamp) {
+        this.baseStationUuid = baseStationUuid;
+        this.mobileStationUuid = mobileStationUuid;
+        this.distance = distance;
+        this.timestamp = timestamp;
+    }
 }

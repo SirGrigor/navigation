@@ -1,7 +1,7 @@
 package com.house.navigation.controller;
 
-import com.house.navigation.DTO.MobileStationDTO;
-import com.house.navigation.DTO.ReportDTO;
+import com.house.navigation.DTO.MobileStationDto;
+import com.house.navigation.DTO.ReportDto;
 import com.house.navigation.service.ReportStationService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class StationController {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<ReportDTO> addBaseStationReport(@RequestBody ReportDTO reportDTO) {
+    public ResponseEntity<ReportDto> addBaseStationReport(@RequestBody ReportDto reportDTO) {
         if (!reportStationService.existByUuid(reportDTO.getBaseStationUuid())) {
             log.error("BaseStation with UUID: " + reportDTO.getBaseStationUuid() + " dont exist.");
         } else {
@@ -31,7 +31,7 @@ public class StationController {
     }
 
     @GetMapping("/location/{mobileStationUuid}")
-    public MobileStationDTO getMobileStationReport(@PathVariable UUID mobileStationUuid) throws NotFoundException {
+    public MobileStationDto getMobileStationReport(@PathVariable UUID mobileStationUuid) throws NotFoundException {
 
         if (reportStationService.reportRepositoryNotEmpty()) {
             return reportStationService.getReportForMobileStation(mobileStationUuid);
@@ -41,6 +41,5 @@ public class StationController {
             throw new ArithmeticException("Add at least 1 Base Station report! Trilateration calculation cannot be proceeded");
         }
     }
-
 }
 

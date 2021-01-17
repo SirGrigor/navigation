@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportDataDTO {
+public class ReportDtoMobileStationRecords {
 
     private UUID mobileStationUuid;
     private float distance;
