@@ -1,6 +1,7 @@
 package com.house.navigation.controller;
 
 import com.house.navigation.DTO.MobileStationDto;
+import com.house.navigation.DTO.MobileStationLogRequestDto;
 import com.house.navigation.DTO.ReportDto;
 import com.house.navigation.service.ReportStationService;
 import javassist.NotFoundException;
@@ -31,10 +32,10 @@ public class StationController {
     }
 
     @GetMapping("/location/{mobileStationUuid}")
-    public MobileStationDto getMobileStationReport(@PathVariable UUID mobileStationUuid) throws NotFoundException {
+    public MobileStationDto getMobileStationReport(@RequestBody MobileStationLogRequestDto mobileStationLogRequestDto) throws NotFoundException {
 
         if (reportStationService.reportRepositoryNotEmpty()) {
-            return reportStationService.getReportForMobileStation(mobileStationUuid);
+            return reportStationService.getReportForMobileStation(mobileStationLogRequestDto);
 
         } else {
             log.error("Not enough reports to generate Calculation process.");

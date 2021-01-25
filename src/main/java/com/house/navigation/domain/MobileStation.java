@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -29,10 +30,12 @@ public class MobileStation {
     @Column(name = "last_coordinate_y")
     private float lastCoordinateY;
 
+    @OneToMany(mappedBy = "mobileStation")
+    private Set<MobileStationCoordinates> mobileStationCoordinates;
+
     public MobileStation(UUID mobileStationUuid, float lastCoordinateX, float lastCoordinateY) {
         this.mobileStationUuid = mobileStationUuid;
         this.lastCoordinateX = lastCoordinateX;
         this.lastCoordinateY = lastCoordinateY;
     }
-
 }

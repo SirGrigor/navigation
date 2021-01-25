@@ -1,6 +1,7 @@
 package com.house.navigation.service;
 
 import com.house.navigation.DTO.MobileStationDto;
+import com.house.navigation.DTO.MobileStationLogRequestDto;
 import com.house.navigation.DTO.ReportDto;
 import com.house.navigation.DTO.ReportDtoMobileStationRecords;
 import com.house.navigation.domain.ReportStation;
@@ -35,8 +36,8 @@ public class ReportStationService {
         reportStationRepository.saveAll(reportStations);
     }
 
-    public MobileStationDto getReportForMobileStation(UUID mobileStationUuid) throws NotFoundException {
-        return CalculateDistanceService.getMobileStationReport(mobileStationUuid);
+    public MobileStationDto getReportForMobileStation(MobileStationLogRequestDto mobileStationLogRequestDto) throws NotFoundException {
+        return CalculateDistanceService.getMobileStationReport(mobileStationLogRequestDto);
     }
 
     private void validateReportData(ReportDto reportDTO, List<ReportStation> reportStations,

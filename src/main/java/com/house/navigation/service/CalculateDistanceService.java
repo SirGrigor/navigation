@@ -1,6 +1,7 @@
 package com.house.navigation.service;
 
 import com.house.navigation.DTO.MobileStationDto;
+import com.house.navigation.DTO.MobileStationLogRequestDto;
 import com.house.navigation.domain.BaseStation;
 import com.house.navigation.domain.MobileStation;
 import com.house.navigation.domain.ReportStation;
@@ -32,13 +33,13 @@ public class CalculateDistanceService {
         this.mobileStationRepository = mobileStationRepository;
     }
 
-    public MobileStationDto getMobileStationReport(UUID mobileStationUuid) throws NotFoundException {
-        List<ReportStation> reportStations = getSortedByTimeStampReportStations(mobileStationUuid);
+    public MobileStationDto getMobileStationReport(MobileStationLogRequestDto mobileStationLogRequestDto) throws NotFoundException {
+        List<ReportStation> reportStations = getSortedByTimeStampReportStations(mobileStationLogRequestDto.getMobileStationUuid());
         List<BaseStation> baseStations = getExtractedBaseStationsForCalculation(reportStations);
 
         LeastSquaresOptimizer.Optimum optimum = calculateMobileStationPosition(reportStations, baseStations);
         double[] mobileStationCoordinates = optimum.getPoint().toArray();
-        return getMobileStationDTO(mobileStationUuid, reportStations, calculateErrorRadius(mobileStationCoordinates, baseStations.get(0)), mobileStationCoordinates);
+        return getMobileStationDTO(mobileStationLogRequestDto.getMobileStationUuid(), reportStations, calculateErrorRadius(mobileStationCoordinates, baseStations.get(0)), mobileStationCoordinates);
     }
 
     public MobileStationDto getMobileStationDTO(UUID mobileStationUuid, List<ReportStation> reportStations, float errorRadius, double[] mobileStationCoordinates) {
