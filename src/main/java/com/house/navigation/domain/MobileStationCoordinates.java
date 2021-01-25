@@ -16,11 +16,19 @@ public class MobileStationCoordinates {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "mobile_station_id_coordinates")
+    @Column(name = "ms_coordinates_id")
     private Long id;
+
+    @Column(name = "mobile_station_uuid")
     private UUID mobileStationUuid;
+
+    @Column(name = "last_coordinate_x")
     private float coordinateX;
+
+    @Column(name = "last_coordinate_y")
     private float coordinateY;
+
+    @Column(name = "registation_time")
     private Date registrationTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
