@@ -3,10 +3,10 @@ package com.house.navigation.service;
 import com.house.navigation.DTO.MobileStationDto;
 import com.house.navigation.DTO.MobileStationLogRequestDto;
 import com.house.navigation.domain.BaseStation;
-import com.house.navigation.domain.MobileStation;
+import com.house.navigation.domain.MobileStationCoordinates;
 import com.house.navigation.domain.ReportStation;
 import com.house.navigation.repository.BaseStationRepository;
-import com.house.navigation.repository.MobileStationRepository;
+import com.house.navigation.repository.MobileStationCoordinatesRepository;
 import com.house.navigation.repository.ReportStationRepository;
 import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver;
 import com.lemmingapex.trilateration.TrilaterationFunction;
@@ -17,6 +17,7 @@ import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,42 +26,70 @@ import java.util.UUID;
 public class CalculateDistanceService {
     private final BaseStationRepository baseStationRepository;
     private final ReportStationRepository reportStationRepository;
-    private final MobileStationRepository mobileStationRepository;
+    private final MobileStationCoordinatesRepository mobileStationCoordinatesRepository;
 
-    public CalculateDistanceService(BaseStationRepository baseStationRepository, ReportStationRepository reportStationRepository, MobileStationRepository mobileStationRepository) {
+    public CalculateDistanceService(BaseStationRepository baseStationRepository, ReportStationRepository reportStationRepository, MobileStationCoordinatesRepository mobileStationCoordinatesRepository) {
         this.baseStationRepository = baseStationRepository;
         this.reportStationRepository = reportStationRepository;
-        this.mobileStationRepository = mobileStationRepository;
+        this.mobileStationCoordinatesRepository = mobileStationCoordinatesRepository;
     }
 
     public MobileStationDto getMobileStationReport(MobileStationLogRequestDto mobileStationLogRequestDto) throws NotFoundException {
+
         List<ReportStation> reportStations = getSortedByTimeStampReportStations(mobileStationLogRequestDto.getMobileStationUuid());
         List<BaseStation> baseStations = getExtractedBaseStationsForCalculation(reportStations);
 
         LeastSquaresOptimizer.Optimum optimum = calculateMobileStationPosition(reportStations, baseStations);
         double[] mobileStationCoordinates = optimum.getPoint().toArray();
-        return getMobileStationDTO(mobileStationLogRequestDto.getMobileStationUuid(), reportStations, calculateErrorRadius(mobileStationCoordinates, baseStations.get(0)), mobileStationCoordinates);
+
+        List<double[]> filteredByTimeRange = filterByTimeRangeCoordinates(mobileStationLogRequestDto);
+
+        return getMobileStationDTO(
+                mobileStationLogRequestDto.getMobileStationUuid(),
+                reportStations, calculateErrorRadius(mobileStationCoordinates, baseStations.get(0)),
+                mobileStationCoordinates,
+                filteredByTimeRange);
     }
 
-    public MobileStationDto getMobileStationDTO(UUID mobileStationUuid, List<ReportStation> reportStations, float errorRadius, double[] mobileStationCoordinates) {
-        saveLastMobileStationCoordinates(mobileStationUuid, mobileStationCoordinates);
+    private List<double[]> filterByTimeRangeCoordinates(MobileStationLogRequestDto mobileStationLogRequestDto) {
+        List<MobileStationCoordinates> coordinateStackTrace =
+                mobileStationCoordinatesRepository
+                        .findAllByRegistrationTimeAfterAndRegistrationTimeBefore(
+                                mobileStationLogRequestDto.getReportStartTime(),
+                                mobileStationLogRequestDto.getReportEndTime());
+        return getExtractedCoordinates(coordinateStackTrace);
+    }
+
+    private List<double[]> getExtractedCoordinates(List<MobileStationCoordinates> coordinateStackTrace) {
+        List<double[]> extractedCoordinates = new ArrayList<>();
+        coordinateStackTrace.forEach(msCoordinate -> {
+            double[] ordinatePair = new double[2];
+            ordinatePair[0] = msCoordinate.getCoordinateX();
+            ordinatePair[1] = msCoordinate.getCoordinateY();
+            extractedCoordinates.add(ordinatePair);
+        });
+        return extractedCoordinates;
+    }
+
+    public MobileStationDto getMobileStationDTO(UUID mobileStationUuid, List<ReportStation> reportStations, float errorRadius, double[] mobileStationCoordinates, List<double[]> filterByTimeRangeCoordinates) {
+        saveMobileStationCoordinates(mobileStationUuid, mobileStationCoordinates, reportStations.get(0).getTimestamp());
 
         float mobileStationCoordinateX = (float) mobileStationCoordinates[0];
         float mobileStationCoordinateY = (float) mobileStationCoordinates[1];
 
         if (reportStations.size() < 3) {
             String errorMessage = "Number of Stations is less than 3, please wait for additional Base Report";
-            return new MobileStationDto(mobileStationUuid, mobileStationCoordinateX, mobileStationCoordinateY, errorRadius, 301, errorMessage);
+            return new MobileStationDto(mobileStationUuid, mobileStationCoordinateX, mobileStationCoordinateY, errorRadius, 301, errorMessage, filterByTimeRangeCoordinates);
 
         } else {
             String errorMessage = "3 Base Station Provided report. Calculation process is healthy";
-            return new MobileStationDto(mobileStationUuid, mobileStationCoordinateX, mobileStationCoordinateY, errorRadius, 200, errorMessage);
+            return new MobileStationDto(mobileStationUuid, mobileStationCoordinateX, mobileStationCoordinateY, errorRadius, 200, errorMessage, filterByTimeRangeCoordinates);
         }
     }
 
-    public void saveLastMobileStationCoordinates(UUID mobileStationUuid, double[] mobileStationCoordinates) {
-        MobileStation mobileStation = new MobileStation(mobileStationUuid, (float) mobileStationCoordinates[0], (float) mobileStationCoordinates[1]);
-        mobileStationRepository.save(mobileStation);
+    public void saveMobileStationCoordinates(UUID mobileStationUuid, double[] msCoordinates, Date timestamp) {
+        MobileStationCoordinates msCoordinate = new MobileStationCoordinates(mobileStationUuid, (float) msCoordinates[0], (float) msCoordinates[1], timestamp);
+        mobileStationCoordinatesRepository.save(msCoordinate);
     }
 
     public float calculateErrorRadius(double[] mobileStationCoordinates, BaseStation baseStation) {

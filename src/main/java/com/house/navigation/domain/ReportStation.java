@@ -1,8 +1,10 @@
 package com.house.navigation.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,6 +32,8 @@ public class ReportStation {
     private float distance;
 
     @Column(name = "timestamp")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private Date timestamp;
 
     public ReportStation(UUID baseStationUuid, UUID mobileStationUuid, float distance, Date timestamp) {

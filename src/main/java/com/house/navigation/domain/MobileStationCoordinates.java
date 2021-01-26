@@ -1,8 +1,10 @@
 package com.house.navigation.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,9 +31,14 @@ public class MobileStationCoordinates {
     private float coordinateY;
 
     @Column(name = "registation_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date registrationTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mobile_station_id")
-    private MobileStation mobileStation;
+    public MobileStationCoordinates(UUID mobileStationUuid, float coordinateX, float coordinateY, Date registrationTime) {
+        this.mobileStationUuid = mobileStationUuid;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.registrationTime = registrationTime;
+    }
 }

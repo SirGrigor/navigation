@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,4 +18,5 @@ public class MobileStationDto {
     private float errorRadius;
     private int errorCode;
     private String errorDescription;
+    private List<double []> mobileStationStackTrace;
 }
